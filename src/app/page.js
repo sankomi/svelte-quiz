@@ -1,12 +1,8 @@
-export default async function Component({params, searchParams}) {
-	let data = await fetch(
-		"http://localhost:3000/api/answer",
-		{cache: "no-store"},
-	)
-		.then(res => res.json());
+import Link from "next/link";
 
+export default function Page() {
 	return <>
 		<h1>next quiz</h1>
-		<p>answer is {data.answer}</p>
+		<Link href="/quiz">start</Link>
 	</>;
 }
