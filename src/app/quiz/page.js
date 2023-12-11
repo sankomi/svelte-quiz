@@ -9,6 +9,6 @@ export default async function Quiz() {
 
 	return <>
 		<h1>quiz</h1>
-		<Questions questions={data.questions}/>
+		<Questions data={data}/>
 	</>;
 }

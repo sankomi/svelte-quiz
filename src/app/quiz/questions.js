@@ -3,19 +3,28 @@
 import {useState} from "react";
 import {useRouter} from "next/navigation";
 
-export default function Questions({questions}) {
+export default function Questions({data}) {
 	const router = useRouter();
 
 	const [index, setIndex] = useState(0);
 
-	let question = questions[index];
+	let question = data.questions[index];
 
 	function select(optionIndex) {
-		questions[index].answer = optionIndex;
-		if (index < questions.length - 1) {
+		data.questions[index].answer = optionIndex;
+		if (index < data.questions.length - 1) {
 			setIndex(index + 1);
 		} else {
-			router.push("/done");
+			fetch("/api/questions", {
+				header: {
+					"Content-Type": "application/json",
+				},
+				method: "POST",
+				body: JSON.stringify(data),
+			})
+				.then(() => {
+					router.push(`/done?quizId=${data.quizId}`);
+				});
 		}
 	}
 
