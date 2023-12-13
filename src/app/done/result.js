@@ -15,10 +15,6 @@ export default function Result({answers}) {
 		}
 	}
 
-	if (!sessionAnswers || !sessionAnswers.length) {
-		return redirect("/");
-	}
-
 	let score = 0;
 	let total = 0;
 	for (let i = 0; i < answers.length; i++) {
