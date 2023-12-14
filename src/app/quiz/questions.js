@@ -7,20 +7,32 @@ export default function Questions({questions}) {
 	const router = useRouter();
 
 	const [index, setIndex] = useState(0);
+	const [selected, setSelected] = useState(null);
 	const [answers, setAnswers] = useState([]);
 
 	let question = questions[index];
 
-	function select(answerIndex) {
+	function select(answer) {
 		let answersCopy = answers;
-		answersCopy[index] = answerIndex;
+		answersCopy[index] = answer;
 		sessionStorage.setItem("answers", JSON.stringify(answersCopy));
+		setSelected(answer);
+		setAnswers([...answersCopy]);
+	}
 
+	function next() {
 		if (index < questions.length - 1) {
+			setSelected(answers.length > index + 1? answers[index + 1]: null);
 			setIndex(index + 1);
-			setAnswers([...answersCopy]);
 		} else {
 			router.push("/done");
+		}
+	}
+
+	function prev() {
+		if (index > 0) {
+			setSelected(answers[index - 1]);
+			setIndex(index - 1);
 		}
 	}
 
@@ -46,9 +58,13 @@ export default function Questions({questions}) {
 		<ul>
 			{question.options.map((option, index) => {
 				return <li key={index}>
-					<button onClick={() => select(index)}>{option}</button>
+					<button onClick={() => select(index)} disabled={index === selected}>{option}</button>
 				</li>;
 			})}
 		</ul>
+		<button onClick={prev} disabled={index === 0}>prev</button>
+		<button onClick={next} disabled={selected === null}>
+			{index < questions.length - 1? "next": "finish"}
+		</button>
 	</>;
 }
