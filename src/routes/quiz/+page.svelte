@@ -57,10 +57,14 @@
 <p>time remaining: {remainTime} seconds</p>
 <h2>question {question.id}</h2>
 <p>{question.text}</p>
-<ul>
+<ul class="options">
 	{#each question.options as text, index}
 		<li>
-			<button on:click={() => answer(question.id, index)} disabled={$answered[question.id] === index}>{text}</button>
+			<button
+				class:selected={$answered[question.id] === index}
+				on:click={() => answer(question.id, index)}
+				disabled={$answered[question.id] === index}
+			>{text}</button>
 		</li>
 	{/each}
 </ul>

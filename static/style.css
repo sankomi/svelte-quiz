@@ -5,3 +5,40 @@
 html {
 	font-family: monospace;
 }
+body {
+	max-width: 60rem;
+	padding: 0 1rem;
+	margin: 1rem auto;
+}
+
+button {
+	display: inline-block;
+	padding: 0.5rem 1rem;
+	border: 1px solid black;
+
+	color: black;
+	background-color: white;
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
+
+	transition: background-color 0.5s, color: 0.5s;
+}
+button:hover {
+	background-color: grey;
+}
+button.selected {
+	color: white;
+	background-color: black;
+}
+button[disabled]:not(.selected) {
+	opacity: 0.25;
+}
+
+.options {
+	display: flex;
+	gap: 1rem;
+	padding-left: 0;
+
+	list-style-type: none;
+}
