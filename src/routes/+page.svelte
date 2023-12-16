@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>next quiz</title>
+	<title>svelte quiz</title>
 </svelte:head>
 
 <h1>next quiz</h1>
