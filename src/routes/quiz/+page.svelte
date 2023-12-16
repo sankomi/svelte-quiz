@@ -5,14 +5,27 @@
 <script>
 	import {onDestroy} from "svelte";
 	import {goto} from "$app/navigation";
-	import {answered} from "../../stores";
+	import {answered} from "$lib/stores";
 
 	export let data;
+
+	let endTime = +new Date() + 10000;
+	let remainTime = 10;
+	let timer = setInterval(() => {
+		remainTime = Math.floor((endTime - +new Date()) * 0.001);
+		if (remainTime < 0) {
+			remainTime = 0;
+			goto("/done");
+		}
+	}, 50);
+	onDestroy(() => clearInterval(timer));
 
 	answered.set([]);
 
 	let time = 0;
-	let question = data.questions;
+	let index = 0;
+	let questions = data.questions;
+	$: question = questions[index];
 
 	function answer(id, option) {
 		answered.update(array => {
@@ -21,13 +34,27 @@
 		});
 	}
 
+	function next() {
+		index++;
+		if (index > questions.length) {
+			index = questions.length - 1;
+		}
+	}
+
+	function prev() {
+		index--;
+		if (index < 0) {
+			index = 0;
+		}
+	}
+
 	function finish() {
 		goto("/done");
 	}
 </script>
 
 <h1>quiz</h1>
-<p>time remaining: {time} seconds</p>
+<p>time remaining: {remainTime} seconds</p>
 <h2>question {question.id}</h2>
 <p>{question.text}</p>
 <ul>
@@ -37,5 +64,9 @@
 		</li>
 	{/each}
 </ul>
-<button>prev</button>
+<button on:click={prev} disabled={index <= 0}>prev</button>
+{#if index >= questions.length - 1}
 <button on:click={finish}>finish</button>
+{:else}
+<button on:click={next}>next</button>
+{/if}
