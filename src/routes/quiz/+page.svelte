@@ -49,6 +49,7 @@
 	}
 
 	function finish() {
+		clearInterval(timer);
 		goto("/done");
 	}
 </script>
