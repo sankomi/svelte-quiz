@@ -22,7 +22,7 @@ button {
 	font-size: inherit;
 	line-height: inherit;
 
-	transition: background-color 0.5s, color: 0.5s;
+	transition: background-color 0.2s, color 0.2s;
 }
 button:hover {
 	background-color: grey;
