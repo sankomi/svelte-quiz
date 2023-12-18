@@ -13,11 +13,10 @@
 		x: -20,
 		duration: 200,
 	};
-
 </script>
 
 {#key pathname}
-<div in:fade={fadeIn} out:fade={fadeOut}>
-	<slot/>
-</div>
+	<div in:fade={fadeIn} out:fade={fadeOut}>
+		<slot/>
+	</div>
 {/key}

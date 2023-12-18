@@ -33,11 +33,13 @@ button.selected {
 }
 button[disabled]:not(.selected) {
 	opacity: 0.25;
+	pointer-events: none;
 }
 
-.options {
+.buttons {
 	display: flex;
 	gap: 1rem;
+	flex-wrap: wrap;
 	padding-left: 0;
 
 	list-style-type: none;

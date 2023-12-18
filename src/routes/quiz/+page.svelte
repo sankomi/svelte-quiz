@@ -4,10 +4,21 @@
 
 <script>
 	import {onDestroy} from "svelte";
+	import {fade} from "svelte/transition";
 	import {goto} from "$app/navigation";
 	import {answered} from "$lib/stores";
 
 	export let data;
+
+	const fadeIn = {
+		x: 20,
+		duration: 200,
+		delay: 300,
+	};
+	const fadeOut = {
+		x: -20,
+		duration: 200,
+	};
 
 	let endTime = +new Date() + 10000;
 	let remainTime = 10;
@@ -34,18 +45,21 @@
 		});
 	}
 
-	function next() {
-		index++;
+	function jump(to) {
+		index = to;
 		if (index > questions.length) {
 			index = questions.length - 1;
+		} else if (index < 0) {
+			index = 0;
 		}
 	}
 
+	function next() {
+		jump(index + 1);
+	}
+
 	function prev() {
-		index--;
-		if (index < 0) {
-			index = 0;
-		}
+		jump(index - 1);
 	}
 
 	function finish() {
@@ -56,22 +70,37 @@
 
 <h1>quiz</h1>
 <p>time remaining: {remainTime} seconds</p>
-<h2>question {question.id}</h2>
-<p>{question.text}</p>
-<ul class="options">
-	{#each question.options as text, index}
+<h2>goto question</h2>
+<ul class="buttons">
+	{#each questions as question, i}
 		<li>
 			<button
-				class:selected={$answered[question.id] === index}
-				on:click={() => answer(question.id, index)}
-				disabled={$answered[question.id] === index}
-			>{text}</button>
+				class:selected={index === i}
+				on:click={() => jump(i)}
+				disabled={index === i}
+			>{i + 1}</button>
 		</li>
 	{/each}
 </ul>
-<button on:click={prev} disabled={index <= 0}>prev</button>
-{#if index >= questions.length - 1}
-<button on:click={finish}>finish</button>
-{:else}
-<button on:click={next}>next</button>
-{/if}
+{#key question}
+	<div in:fade={fadeIn} out:fade={fadeOut}>
+		<h2>question {index + 1}</h2>
+		<p>{question.text}</p>
+		<ul class="buttons">
+			{#each question.options as text, index}
+				<li>
+					<button
+						class:selected={$answered[question.id] === index}
+						on:click={() => answer(question.id, index)}
+						disabled={$answered[question.id] === index}
+					>{text}</button>
+				</li>
+			{/each}
+		</ul>
+		<div class="buttons">
+			<button on:click={prev} disabled={index <= 0}>prev</button>
+			<button on:click={next} disabled={index >= questions.length - 1}>next</button>
+			<button on:click={finish}>finish</button>
+		</div>
+	</div>
+{/key}
