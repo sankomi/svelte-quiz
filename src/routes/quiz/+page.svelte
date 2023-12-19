@@ -31,16 +31,20 @@
 	}, 50);
 	onDestroy(() => clearInterval(timer));
 
-	answered.set([]);
-
 	let time = 0;
 	let index = 0;
 	let questions = data.questions;
 	$: question = questions[index];
 
+	let answerFill = [];
+	questions.forEach((question, index) => {
+		answerFill[index] = {id: question.id, option: -1};
+	});
+	answered.set(answerFill);
+
 	function answer(id, option) {
 		answered.update(array => {
-			array[id] = option;
+			array[index] = {id, option};
 			return array;
 		});
 	}
@@ -87,12 +91,12 @@
 		<h2>question {index + 1}</h2>
 		<p>{question.text}</p>
 		<ul class="buttons">
-			{#each question.options as text, index}
+			{#each question.options as text, i}
 				<li>
 					<button
-						class:selected={$answered[question.id] === index}
-						on:click={() => answer(question.id, index)}
-						disabled={$answered[question.id] === index}
+						class:selected={$answered[index].option === i}
+						on:click={() => answer(question.id, i)}
+						disabled={$answered[index].option === i}
 					>{text}</button>
 				</li>
 			{/each}

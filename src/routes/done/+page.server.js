@@ -1,5 +1,5 @@
-import {answers} from "$lib/server/qna";
+import {questions, answers} from "$lib/server/qna";
 
 export function load() {
-	return {answers};
+	return {questions, answers};
 }
